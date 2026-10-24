@@ -11,7 +11,7 @@ Todo funciona en el navegador, sin instalar nada y sin cuenta. Los proyectos se 
 
 | Link | Abre |
 |---|---|
-| `https://buenosairesfront.github.io/nornscanvas/` | el editor, en el último idioma usado (por defecto español) |
+| `https://buenosairesfront.github.io/nornscanvas/` | el editor, siempre en español |
 | `…/nornscanvas/?lang=en` | en inglés (`es`, `en`, `de`, `fr`, `ja`, `zh`, `hi`) |
 | `…/nornscanvas/docs/` | el manual |
 

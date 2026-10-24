@@ -384,7 +384,7 @@ const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},se
 
 /* ---------- idioma ---------- */
 const LANGS=[['es','Español'],['en','English'],['de','Deutsch'],['fr','Français'],['ja','日本語'],['zh','中文'],['hi','हिन्दी']];
-let lang=(()=>{try{return new URLSearchParams(location.search).get('lang')}catch(_){return null}})()||store.get('nc_lang')||'es';if(!LANGS.some(l=>l[0]===lang))lang='es';
+let lang=(()=>{try{return new URLSearchParams(location.search).get('lang')}catch(_){return null}})()||'es';if(!LANGS.some(l=>l[0]===lang))lang='es';
 const DICT={en:{},ja:{},de:{},fr:{},hi:{},zh:{}};
 const TR={
 '+ Varios':['+ Multi','+ 複数'],'1 bit':['1-bit','1ビット'],'16 pasos':['16 steps','16ステップ'],'A píxeles':['To pixels','ピクセル化'],'ADSR':['ADSR','ADSR'],
