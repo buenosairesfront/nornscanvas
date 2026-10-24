@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1C1D1F">
+<title>norns canvas · manual</title>
+<meta name="description" content="Manual de norns canvas / U-MA: editor de pantallas 128×64 para monome norns.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1C1D1F;--body:#D5D6D7;--paper:#EFEFEE;--ink:#111;--muted:#5B5C5E;--mag:#C2185B;--cya:#1FA3C7;--yel:#D6B21E;--amb:#ffb020;--disp:"Barlow Condensed",Impact,sans-serif;color-scheme:light}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#000;--body:#2B2C2E;--paper:#1B1C1E;--ink:#E9E9E8;--muted:#9A9B9D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#000;--body:#2B2C2E;--paper:#1B1C1E;--ink:#E9E9E8;--muted:#9A9B9D;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg)}
+body{color:var(--ink);font:14px/1.55 "IBM Plex Mono",ui-monospace,Menlo,monospace}
+.wrap{max-width:680px;margin:12px auto 30px;padding:14px 16px 24px;background:var(--body);border:3px solid #0d0d0d;border-radius:30px}
+header{background:#121314;color:#EFEFEE;border-radius:20px;padding:14px 16px;border:2px solid #0d0d0d}
+header i{display:block;font:500 9px/1 "IBM Plex Mono",monospace;font-style:normal;letter-spacing:.12em;color:#8a8b8d;margin-bottom:6px}
+header h1{margin:0;font:800 40px/.9 var(--disp);text-transform:uppercase}
+header p{margin:8px 0 0;color:#b8b6ae;font-size:12.5px}
+.go{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.go a{font:600 11.5px/1 "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.04em;text-decoration:none;padding:10px 12px;border-radius:10px;border:2px solid #000;background:var(--mag);color:#fff}
+.go a.alt{background:#1c1c1d;color:#e2e0d8;border-color:#4a4a4c}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin:12px 0 0}
+nav a{font:600 10.5px/1 "IBM Plex Mono",monospace;text-transform:uppercase;color:var(--ink);text-decoration:none;padding:7px 9px;border:2px solid #0d0d0d;border-radius:9px;background:var(--paper)}
+section{background:var(--paper);border:3px solid #0d0d0d;border-radius:18px;margin-top:12px;overflow:hidden}
+section>h2{margin:0;display:flex;align-items:baseline;gap:10px;padding:8px 14px;border-bottom:2px solid #0d0d0d;font:800 24px/1 var(--disp);text-transform:uppercase;letter-spacing:.02em}
+section>h2 b{font:800 30px/.8 var(--disp);color:var(--mag)}
+section>div{padding:4px 14px 14px}
+h3{font:700 18px/1 var(--disp);text-transform:uppercase;margin:16px 0 6px;letter-spacing:.03em}
+p,li{margin:6px 0}
+ul,ol{padding-left:20px;margin:6px 0}
+code{background:rgba(0,0,0,.08);padding:1px 4px;border-radius:4px;font-size:12.5px;overflow-wrap:anywhere}
+pre{background:#0c0c0c;color:var(--amb);padding:10px 12px;border-radius:10px;overflow-x:auto;font-size:12px;line-height:1.5}
+pre code{background:none;padding:0;color:inherit}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+td,th{border-bottom:1px solid rgba(127,127,127,.35);padding:6px 4px;text-align:left;vertical-align:top}
+th{font:600 10px/1.2 "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.tip{border-left:4px solid var(--cya);padding:4px 10px;margin:10px 0;background:rgba(31,163,199,.1)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+.chips span{font-size:11.5px;border:1.5px solid currentColor;border-radius:7px;padding:2px 6px}
+footer{text-align:center;color:#8a8b8d;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin:16px 0 0}
+footer a{color:inherit}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <i>U-MA サウンド / TOOL 01 / MANUAL</i>
+  <h1>norns canvas</h1>
+  <p>Editor de pantallas para el monome norns: dibujás en 128×64 píxeles con 16 niveles de brillo y exportás Lua listo para el norns, GIF o PNG. Funciona en el navegador del celular, sin cuenta.</p>
+  <div class="go"><a href="../">Abrir norns canvas</a><a class="alt" href="../?lang=en">English</a><a class="alt" href="https://github.com/buenosairesfront/nornscanvas">GitHub</a></div>
+</header>
+
+<nav>
+  <a href="#inicio">Inicio</a><a href="#pantalla">Pantalla</a><a href="#herramientas">Herramientas</a><a href="#objetos">Objetos y capas</a><a href="#niveles">Niveles</a><a href="#libreria">Librería</a><a href="#efectos">Efectos</a><a href="#frames">Frames</a><a href="#exportar">Exportar</a><a href="#norns">En el norns</a><a href="#proyectos">Proyectos</a><a href="#faq">Preguntas</a>
+</nav>
+
+<section id="inicio"><h2><b>01</b>Inicio rápido</h2><div>
+  <ol>
+    <li>Abrí <a href="../">norns canvas</a>. Arranca con un proyecto vacío: una capa, un frame.</li>
+    <li>Elegí una herramienta (SEC 01) y un nivel de brillo (SEC 03), y dibujá sobre la pantalla.</li>
+    <li>Sumá elementos de la <b>Librería</b> (botones, knobs, ondas, íconos) y ajustalos con <b>Seleccionar</b>.</li>
+    <li>Tocá <b>Exportar</b> → <b>Lua</b> → <b>Script completo</b> y descargalo o copialo.</li>
+    <li>Copialo al norns en <code>dust/code/</code> y abrilo desde SELECT.</li>
+  </ol>
+  <p class="tip">Agregalo a la pantalla de inicio del teléfono (Compartir → Agregar a inicio) y se abre como una app.</p>
+</div></section>
+
+<section id="pantalla"><h2><b>02</b>La pantalla y los controles</h2><div>
+  <p>La pantalla imita el OLED del norns: <b>128×64 píxeles</b>, coordenadas de <code>0,0</code> (arriba a la izquierda) a <code>127,63</code>. La lectura bajo la pantalla muestra la posición del dedo y el objeto activo.</p>
+  <h3>Barra de zoom</h3>
+  <ul>
+    <li><b>− / +</b> alejan y acercan; <b>Ajustar</b> vuelve a encajar la pantalla. Con zoom, las barras X / Y desplazan la vista.</li>
+    <li><b>⇧ Libre</b> escala sin mantener la proporción.</li>
+    <li><b>Grilla</b> muestra u oculta la grilla de píxeles.</li>
+  </ul>
+  <h3>Teclas y perillas (como en el norns)</h3>
+  <table>
+    <tr><th>Control</th><th>Función</th></tr>
+    <tr><td>K1</td><td>grilla on / off</td></tr>
+    <tr><td>K2</td><td>deshacer</td></tr>
+    <tr><td>K3</td><td>rehacer</td></tr>
+    <tr><td>E1</td><td>nivel de brillo</td></tr>
+    <tr><td>E2</td><td>frame</td></tr>
+    <tr><td>E3</td><td>zoom</td></tr>
+  </table>
+  <p>Las perillas se giran arrastrando a los lados, o con el teclado cuando tienen foco.</p>
+  <h3>Barra superior</h3>
+  <p><b>▶</b> anima los frames · <b>Compartir</b> imagen o video con marco U-MA · <b>Proyecto</b> guardar y abrir · <b>Exportar</b> Lua, GIF y PNG. Arriba a la derecha: deshacer, rehacer y ajustes (idioma y tema claro / oscuro).</p>
+</div></section>
+
+<section id="herramientas"><h2><b>03</b>Herramientas</h2><div>
+  <table>
+    <tr><th>Herramienta</th><th>Uso</th></tr>
+    <tr><td>Seleccionar</td><td>Tocá un objeto o arrastrá un recuadro para elegir varios. Arrastrá para mover; los cuadraditos escalan y el punto azul gira.</td></tr>
+    <tr><td>Línea</td><td>Arrastrá de punta a punta.</td></tr>
+    <tr><td>Lápiz</td><td>Trazo a mano alzada, píxel por píxel.</td></tr>
+    <tr><td>Goma</td><td>Borra píxeles de los trazos.</td></tr>
+    <tr><td>Balde</td><td>Rellena un área cerrada con el nivel actual.</td></tr>
+    <tr><td>Rect vacío / lleno</td><td>Arrastrá en diagonal.</td></tr>
+    <tr><td>Círculo vacío / lleno</td><td>Arrastrá desde el centro.</td></tr>
+    <tr><td>Polígono</td><td>Polígonos y estrellas de 3 a 64 vértices, o tocá punto por punto y <b>Cerrar</b>. Después, con Seleccionar, editás vértices <b>Uno</b> por uno o <b>Todos</b> juntos.</td></tr>
+    <tr><td>Texto</td><td>Escribí con las fuentes del norns. La fuente 1 (04B_03) se dibuja exacta, píxel por píxel; las demás son una vista previa aproximada.</td></tr>
+    <tr><td>LIB</td><td>Abre la librería de elementos.</td></tr>
+    <tr><td>FX</td><td>Abre los efectos para la selección.</td></tr>
+  </table>
+</div></section>
+
+<section id="objetos"><h2><b>04</b>Objetos, grupos y capas</h2><div>
+  <p>Todo lo que dibujás es un <b>objeto</b> que podés mover, escalar, renombrar o cambiar de nivel sin perder calidad.</p>
+  <ul>
+    <li><b>Selección (SEC 02):</b> <i>Objeto</i> elige uno, <i>Capa</i> toma la capa entera, <i>+ Varios</i> suma objetos a la selección.</li>
+    <li><b>Agrupar / Desagrupar</b> une varios objetos para moverlos juntos.</li>
+    <li><b>Candado</b> bloquea un objeto o capa para que no se seleccione ni se mueva.</li>
+    <li>Pestaña <b>Capas</b>: crear, renombrar, ocultar, bloquear, reordenar y desplegar capas para ver sus objetos.</li>
+    <li>Pestaña <b>Objeto</b>: posición, tamaño, nivel, relleno con patrón, adelante / atrás, duplicar, mover de a 1 px, <i>A píxeles</i> y <i>Unir en un trazo</i>.</li>
+  </ul>
+</div></section>
+
+<section id="niveles"><h2><b>05</b>Niveles y rellenos</h2><div>
+  <p>El norns tiene <b>16 niveles</b> de brillo: 0 es negro (apagado) y 15 el máximo. Tocá un nivel en SEC 03 o girá E1. Con objetos seleccionados, cambia el nivel de todos.</p>
+  <p class="tip">Estética norns: contornos y lo principal en 15, rellenos y detalles en 3 a 10. Los niveles muy bajos casi no se ven en el OLED.</p>
+  <h3>Rellenos con patrón</h3>
+  <div class="chips"><span>Sólido</span><span>1 bit: rayas, diagonal, puntos, cuadros, cruces</span><span>Tono (Bayer)</span><span>Degradado tramado → ← ↓ ↑ radial</span><span>Generativo: ruido, estrellas, celular, ondas</span></div>
+</div></section>
+
+<section id="libreria"><h2><b>06</b>Librería</h2><div>
+  <p>Elementos listos que entran agrupados en la capa actual. Desagrupalos para editar cada parte.</p>
+  <h3>Interfaz</h3>
+  <div class="chips"><span>Botón</span><span>Botón lleno</span><span>Knob</span><span>Encoder anillo</span><span>Medidor aguja</span><span>Fader</span><span>Slider</span><span>Progreso</span><span>Vúmetro</span><span>16 pasos</span><span>Pads 4×4</span><span>Toggle</span><span>Checkbox</span><span>Radio</span><span>Menú</span><span>Pestañas</span><span>Parámetros</span><span>Teclado</span><span>Piano</span><span>Batería</span><span>Etiqueta</span><span>Log</span><span>Scrollbar</span></div>
+  <h3>Señales</h3>
+  <div class="chips"><span>Seno</span><span>Cuadrada</span><span>Sierra</span><span>Triangular</span><span>ADSR</span><span>Espectro</span><span>Osciloscopio</span><span>Ruido</span><span>Pulso</span><span>Lissajous 3:2</span><span>Amortiguada</span></div>
+  <h3>Íconos</h3>
+  <div class="chips"><span>Play</span><span>Stop</span><span>Pausa</span><span>Rec</span><span>Corazón</span><span>Nota</span><span>Altavoz</span><span>Sol</span><span>Luna</span><span>Rayo</span><span>Reloj</span><span>Engranaje</span><span>Candado</span><span>Descarga</span><span>Cursor</span><span>Mira</span><span>Radar</span><span>Tierra</span><span>Código barras</span><span>Peligro</span><span>Advertencia</span><span>Flecha</span><span>Cohete</span><span>Ojo</span><span>Casa</span><span>Árbol</span><span>Pez</span><span>Ballena</span><span>Diente de león</span><span>Wifi</span></div>
+  <h3>Formas</h3>
+  <div class="chips"><span>Estrella</span><span>Triángulo</span><span>Rombo</span><span>Pentágono</span><span>Hexágono</span><span>Octágono</span><span>Cruz</span><span>Concéntricos</span><span>Anillo punteado</span><span>Espiral</span><span>Montañas</span><span>Olas</span><span>Puntos</span><span>Degradado tramado</span><span>Trapecio</span><span>Paralelogramo</span><span>Semicírculo</span><span>Gota</span><span>Hoja</span><span>Nube</span><span>Rosa polar</span><span>Infinito</span><span>Planeta anillado</span><span>Marco esquinas</span></div>
+  <h3>Botones del norns</h3>
+  <p>En la pestaña Objeto podés marcar cualquier objeto como <b>botón</b>, con una etiqueta y un id de acción. El script exportado los recorre con <b>E2</b> y los presiona con <b>K3</b>, y llama a <code>on_button(id)</code>, donde escribís qué hace cada uno.</p>
+</div></section>
+
+<section id="efectos"><h2><b>07</b>Efectos</h2><div>
+  <p>Primero seleccioná uno o más objetos; los efectos se aplican sobre la selección. La mayoría la convierte en píxeles. <i>Contorno, sombra, resplandor, eco y destellos</i> agregan un objeto nuevo agrupado con el original.</p>
+  <div class="chips"><span>Invertir</span><span>Brillo + / −</span><span>1 bit</span><span>Dithering</span><span>Dithering 4 niveles</span><span>Posterizar</span><span>Solarizar</span><span>Nivel al azar</span><span>Ruido</span><span>Degradado H / V</span><span>Radial</span><span>Tramado</span><span>Tramado Bayer</span><span>Tramado degradado ↓ ↑ → ←</span><span>Tramado radial</span><span>Scanlines</span><span>Espejo H / V</span><span>Rotar 90° / 180°</span><span>Simetría</span><span>Engrosar</span><span>Adelgazar</span><span>Vaciar</span><span>Pixelar 2×</span><span>Contorno</span><span>Sombra</span><span>Resplandor</span><span>Eco</span><span>Destellos</span></div>
+  <h3>Importar imagen</h3>
+  <p>En <b>Proyecto</b>: elegí una foto, cómo encajarla (entera, llenar o estirar), si aplicar tramado y si tratar el negro como transparente. Entra en una capa nueva en 16 niveles.</p>
+</div></section>
+
+<section id="frames"><h2><b>08</b>Frames y animación</h2><div>
+  <ul>
+    <li>Pestaña <b>Frames</b>: agregar, duplicar, borrar y ordenar frames; elegir los fps del proyecto y activar <b>papel cebolla</b> para ver el frame anterior.</li>
+    <li><b>▶</b> reproduce todo en loop. E2 pasa de frame.</li>
+    <li><b>Animación por objeto</b> (pestaña Objeto, sección ∿): movimiento (oscilar, orbitar, rebotar), pulso de escala, fade y barrido tramado. Se exporta a Lua y corre en el norns con un metro a 30 fps.</li>
+  </ul>
+</div></section>
+
+<section id="exportar"><h2><b>09</b>Exportar y compartir</h2><div>
+  <table>
+    <tr><th>Formato</th><th>Para qué</th></tr>
+    <tr><td>Lua · Script completo</td><td>Un script listo para el norns, con <code>init</code>, <code>redraw</code>, <code>enc</code>, <code>key</code>, frames, animaciones y botones.</td></tr>
+    <tr><td>Lua · Funciones</td><td>Solo las funciones de dibujo, para pegar en un script tuyo.</td></tr>
+    <tr><td>GIF animado</td><td>Todos los frames en loop, con la paleta ámbar de 16 niveles. Escala 1× a 8×.</td></tr>
+    <tr><td>PNG del frame</td><td>El frame actual, escalado.</td></tr>
+    <tr><td>Hoja de sprites</td><td>Todos los frames uno al lado del otro, para animar en otros programas.</td></tr>
+    <tr><td>Compartir</td><td>Imagen o video con marco U-MA, listo para historias de Instagram.</td></tr>
+  </table>
+  <p>El código usa coordenadas con <code>.5</code> para que cairo pinte exactamente los mismos píxeles que ves en el editor.</p>
+</div></section>
+
+<section id="norns"><h2><b>10</b>Llevarlo al norns</h2><div>
+  <ol>
+    <li>Exportá <b>Script completo</b> y descargalo (queda como <code>nombre.lua</code>).</li>
+    <li>Conectate al norns por wifi y copiá el archivo a <code>dust/code/nombre/nombre.lua</code> (por SMB: <code>smb://norns.local</code>, usuario <code>we</code>), o abrí maiden (<code>http://norns.local</code>), creá un script nuevo y pegá el código.</li>
+    <li>En el norns: K1 → SELECT → <i>nombre</i> → K3.</li>
+  </ol>
+  <h3>Usar solo las funciones</h3>
+<pre><code>function redraw()
+  screen.clear()
+  screen.aa(0)
+  screen.line_width(1)
+  screen.line_cap("square")
+  screen.line_join("round")
+  draw_frame_1()  -- generado por norns canvas
+  screen.update()
+end</code></pre>
+  <p>Si el diseño tiene botones, llamá también <code>draw_buttons()</code> al final. Si tiene animaciones, llamá <code>anim_init()</code> en <code>init()</code>.</p>
+</div></section>
+
+<section id="proyectos"><h2><b>11</b>Proyectos</h2><div>
+  <ul>
+    <li><b>Guardar en el teléfono</b>: queda en el navegador de ese dispositivo y aparece en <i>Guardados</i>. El trabajo en curso también se guarda solo.</li>
+    <li><b>Descargar .json</b> / <b>Abrir .json</b>: el archivo del proyecto, para pasarlo a otro dispositivo o hacer copia de seguridad.</li>
+    <li>Si borrás los datos del navegador o usás modo incógnito, lo guardado en el teléfono se pierde: bajá el .json.</li>
+  </ul>
+</div></section>
+
+<section id="faq"><h2><b>12</b>Preguntas</h2><div>
+  <h3>¿Se ve igual en el norns?</h3>
+  <p>Los píxeles, sí. El brillo real del OLED varía por unidad: los niveles bajos (1–2) pueden no verse, y las líneas horizontales muy largas y brillantes pueden “sangrar” en su fila.</p>
+  <h3>¿Por qué el texto se ve distinto?</h3>
+  <p>Solo la fuente 1 se dibuja exacta. Las demás son una aproximación; probalas en tu unidad.</p>
+  <h3>¿Y la IA de dibujo?</h3>
+  <p>Solo aparece cuando la herramienta se abre como artefacto dentro de claude.ai. En esta versión web queda oculta; todo lo demás funciona igual.</p>
+  <h3>Idiomas</h3>
+  <p>Español, English, Deutsch, Français, 日本語, 中文 y हिन्दी, desde Ajustes o con <code>?lang=en</code> (es, en, de, fr, ja, zh, hi) en el link.</p>
+</div></section>
+
+<footer>U-MA サウンド · Buenos Aires Front · <a href="../">abrir norns canvas</a></footer>
+</div>
+</body>
+</html>
